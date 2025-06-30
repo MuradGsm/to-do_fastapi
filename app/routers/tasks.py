@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.crud import create_task_service, get_all_tasks_service, get_task_service, update_task_service
+from app.crud import create_task_service, get_all_tasks_service, get_task_service, update_task_service, delete_task_service
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_session
 from app.schemas import TaskIn, TaskOut, TaskUpdate
@@ -22,3 +22,7 @@ async def get_task(task_id: int, db: AsyncSession = Depends(get_session)):
 @router.put('/{task_id}/update', response_model=TaskOut)
 async def update_task(task_id: int, task_in: TaskUpdate, db: AsyncSession = Depends(get_session)):
     return await update_task_service(task_id, task_in, db)
+
+@router.delete('/{task_id}/delete')
+async def delete_task(task_id: int, db: AsyncSession = Depends(get_session)):
+    return await delete_task_service(task_id, db)

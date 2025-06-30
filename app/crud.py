@@ -34,3 +34,9 @@ async def update_task_service(task_id: int, task_in: TaskUpdate, db: AsyncSessio
     await db.refresh(task)
     return task
 
+async def delete_task_service(task_id: int, db: AsyncSession) -> dict:
+    task = await get_task_service(task_id, db)
+    await db.delete(task)
+    await db.commit()
+    return {"Message": "Delete succesfully"}
+

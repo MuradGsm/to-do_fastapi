@@ -1,9 +1,10 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.schemas import TaskIn
+from app.schemas import TaskIn, TaskUpdate
 from app.models import Task
 from typing import List
+from app.utils import get_task_utils
 
 async def create_task_service(task_in: TaskIn, db: AsyncSession) -> Task:
     new_task = Task(**task_in.dict())
@@ -20,10 +21,16 @@ async def get_all_tasks_service(db: AsyncSession) -> List[Task]:
     return tasks
 
 async def get_task_service(task_id: int, db: AsyncSession) -> Task:
-    stmt = select(Task).filter(Task.id == task_id)
-    result = await db.execute(stmt)
-    task = result.scalars().first()
-    if task is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Task not found!')
+    task = await get_task_utils(task_id, db)
     return task
     
+async def update_task_service(task_id: int, task_in: TaskUpdate, db: AsyncSession) -> Task:
+    task = await get_task_utils(task_id, db)
+    
+    for failed ,value in task_in.dict().items():
+        setattr(task, failed, value )
+
+    await db.commit()
+    await db.refresh(task)
+    return task
+

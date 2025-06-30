@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import Task
+from app.models.task_models import Task
 
 
 async def get_task_utils(task_id: int, db: AsyncSession):

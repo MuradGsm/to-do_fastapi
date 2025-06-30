@@ -5,9 +5,9 @@ from os.path import dirname, abspath
 
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 
-from app.database import Base
-from app.database import setting
-from app.models import Task
+from app.settings.database import Base
+from app.settings.database import setting
+from app.models.task_models import Task
 
 
 from sqlalchemy import pool

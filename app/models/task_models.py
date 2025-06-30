@@ -1,4 +1,4 @@
-from app.database import Base, int_pk
+from app.settings.database import Base, int_pk
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Boolean
 

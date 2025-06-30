@@ -1,9 +1,8 @@
-from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.schemas import TaskIn, TaskUpdate
-from app.models import Task
-from typing import List
+from app.schemas.task_schemas import TaskIn, TaskUpdate
+from app.models.task_models import Task
+from typing import List, Optional
 from app.utils import get_task_utils
 
 async def create_task_service(task_in: TaskIn, db: AsyncSession) -> Task:
@@ -14,8 +13,10 @@ async def create_task_service(task_in: TaskIn, db: AsyncSession) -> Task:
     return new_task
 
 
-async def get_all_tasks_service(db: AsyncSession) -> List[Task]:
+async def get_all_tasks_service(db: AsyncSession, is_done: Optional[bool] = None) -> List[Task]:
     stmt  = select(Task)
+    if is_done is not None:
+        stmt = stmt.where(Task.is_done == is_done)
     result = await db.execute(stmt)
     tasks = result.scalars().all()
     return tasks

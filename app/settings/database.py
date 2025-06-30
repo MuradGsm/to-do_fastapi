@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import mapped_column, DeclarativeBase, declared_attr, Mapped
 from sqlalchemy import func
-from app.config import setting
+from app.settings.config import setting
 from typing import Annotated
 from datetime import datetime
 

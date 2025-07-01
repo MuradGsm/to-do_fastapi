@@ -2,8 +2,9 @@ from fastapi import HTTPException, status
 from app.models.user_models import User
 from app.schemas.user_schema import UserCreate, UserOut, UserLogin
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.utils import hash_password, verify_password
+from app.utils.utils import hash_password, verify_password
 from sqlalchemy import select
+from app.utils.jwt import create_access_token
 
 async def register_user_service(user:UserCreate, db: AsyncSession) -> User:
     stmt = select(User).filter(User.email == user.email)
@@ -26,5 +27,6 @@ async def user_login_service(user: UserLogin, db: AsyncSession):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
     if not verify_password(user.password ,log_user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='The password or email is incorrect !')    
-    return {'Message': 'token'}
+    access_token = create_access_token(data={"sub": log_user.id})
+    return {"access_token": access_token, "token_type": "bearer"}
     

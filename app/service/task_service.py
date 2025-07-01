@@ -3,7 +3,7 @@ from sqlalchemy import select
 from app.schemas.task_schemas import TaskIn, TaskUpdate
 from app.models.task_models import Task
 from typing import List, Optional
-from app.utils import get_task_utils
+from app.utils.utils import get_task_utils
 
 async def create_task_service(task_in: TaskIn, db: AsyncSession) -> Task:
     new_task = Task(**task_in.dict())

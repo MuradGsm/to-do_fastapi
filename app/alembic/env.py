@@ -8,6 +8,7 @@ sys.path.insert(0, dirname(dirname(abspath(__file__))))
 from app.settings.database import Base
 from app.settings.database import setting
 from app.models.task_models import Task
+from app.models.user_models import User
 
 
 from sqlalchemy import pool
